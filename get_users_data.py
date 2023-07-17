@@ -1,5 +1,6 @@
 import get_data
-
+import json
+from pprint import pprint
 def get_users_data(data:dict) -> list:
     """
     Take the data of the first name, last name and phone number. Return the list.
@@ -12,16 +13,16 @@ def get_users_data(data:dict) -> list:
     Returns:
         list: users data list
     """
-    dt = {}
-    lst_data = []
-    for n in range(len(data['results'])):
-        dt['first_name'] = data['results'][n]['name']['first']
-        dt['last_name'] = data['results'][n]['name']['last']
-        dt['phone_number'] = data['results'][n]['phone']
-        dictionary = dt.copy()
-        lst_data.append(dictionary)
-    return lst_data
+    lst = []
+    for user in data["results"]:
+        data = {
+            "first_name":user["name"]["first"],
+            "last_name":user["name"]["last"],
+            "phone_number":user["phone"]
+        }
+    lst.append(data)
+    return lst
 
-
-data = get_data.get_data('randomuser_data.json')
-print(get_users_data(data))
+data_json = open("randomuser_data.json","r").read()
+data = json.loads(data_json)
+pprint(get_users_data(data))
